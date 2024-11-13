@@ -9,7 +9,7 @@ incorporate a new element learned independently.
 ## Team Members
 - Kaushik Kumar
 - Rohith Singaravelu
-- Hemnath A
+- Hemanath A
 - Hemant Kumar B K
 
 ## Project Structure
@@ -22,7 +22,7 @@ Each folder contains a `README.md` file explaining its purpose.
 
 ## Goals
 - Explore trends in the gaming industry through data visualization.
-- Utilize an R package or technique not taught in class to enhance visual storytelling.
+- Incorporate an R package or technique beyond the course curriculum to elevate visual storytelling.
 - Answer the following research questions:
   1. How have gaming trends evolved over time?
   2. What is the relationship between platform popularity and user ratings?
