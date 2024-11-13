@@ -1,0 +1,61 @@
+---
+title: "Gaming Trends Visualization Project: Q&A Session"
+author: "Team Members: Kaushik Kumar, Rohith Singaravelu, Hemnath A, Hemanth Kumar"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+---
+
+# Introduction
+Welcome to the Q&A session for our Gaming Trends Visualization Project. This document addresses key questions related to our analysis, dataset, and insights.
+
+# Research Questions Recap
+
+1. **Temporal Trends**: How have the number of games released evolved over the years?
+2. **Platform Dynamics**: What is the relationship between platform popularity and user ratings?
+3. **Genre Popularity**: Which genres are experiencing growth or decline in popularity?
+4. **Geographical Trends**: Which regions are leading in game development, and how has this changed over time?
+5. **Economic Analysis**: How do development budgets influence the success of games?
+6. **Audience Targeting**: Are there significant differences in user ratings based on target demographics?
+
+# Commonly Asked Questions
+
+## 1. What is the main goal of this project?
+Our primary objective is to leverage data visualization to uncover insights into gaming trends, offering a comprehensive analysis across platforms, genres, and regions.
+
+## 2. Why did you choose the Kaggle dataset?
+The Kaggle dataset provides a rich, diverse collection of real-world gaming data. It covers various dimensions, including user ratings, development budgets, and release years, which are critical for our analysis.
+
+## 3. How did you handle missing or incomplete data?
+We performed rigorous data cleaning, including:
+- Removing records with critical missing fields.
+- Imputing values for less critical missing fields where feasible.
+
+## 4. What were the key challenges?
+Some challenges we faced include:
+- Handling data imbalance across platforms and genres.
+- Addressing outliers in budget and rating fields.
+- Visualizing high-dimensional data effectively.
+
+## 5. What visualization tools and techniques did you use?
+We primarily used:
+- **ggplot2** for static visualizations.
+- Advanced packages for interactive and dynamic visualizations, such as **plotly**.
+- Custom themes for enhancing the aesthetic and interpretability of plots.
+
+# Insights and Next Steps
+
+## Key Insights
+- **Temporal Growth**: Steady increase in game releases, with notable peaks during new console releases.
+- **Platform Preferences**: PC and Mobile gaming are growing, with strong user engagement.
+- **Budget Influence**: Higher budgets generally correlate with higher user ratings, but exceptions exist.
+
+## Next Steps
+- Extend the analysis to include more detailed player engagement metrics.
+- Explore machine learning models to predict game success based on the dataset features.
+
+# Conclusion
+We appreciate your interest and questions regarding our project. Please feel free to ask any additional questions during the session or contact us for more detailed discussions.
