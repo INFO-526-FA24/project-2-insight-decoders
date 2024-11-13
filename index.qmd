@@ -1,0 +1,29 @@
+
+---
+title: "Gaming Trends Visualization Project"
+author: "Team Members: Kaushik Kumar, Rohith Singaravelu, Hemnath A, Hemanth Kumar"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+---
+
+# Welcome to the Gaming Trends Visualization Project
+
+## Overview
+This project explores the dynamic world of gaming through advanced data visualization techniques. Our aim is to analyze key industry trends and provide valuable insights into platform popularity, genre dynamics, and user ratings.
+
+## Project Goals
+- Utilize a novel data visualization technique/package to enhance storytelling.
+- Answer key research questions about gaming trends.
+- Create interactive and static visualizations to communicate findings effectively.
+
+## Project Structure
+- [Proposal](Proposal.qmd)
+- Data and Scripts
+- [Final Report](Final_Report.qmd)
+- [Poster Presentation](Poster.qmd)
+
+Stay tuned for updates as we progress through our analysis and visualization journey.
