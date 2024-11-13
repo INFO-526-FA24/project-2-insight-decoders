@@ -11,33 +11,59 @@ output:
 ---
 
 # Introduction
-The gaming industry has seen tremendous growth in recent years, driven by advancements in technology and shifting consumer preferences. This project aims to analyze key trends in the gaming sector through the lens of data visualization. By leveraging a synthetic dataset of gaming trends, we intend to provide actionable insights and demonstrate the power of advanced visualization techniques.
+The gaming industry continues to expand and evolve, driven by rapid advancements in technology and changing user preferences. Our project aims to analyze these trends using a dataset sourced from **Kaggle**, which contains 1000 records related to gaming. This analysis will leverage advanced data visualization techniques to uncover insights and answer critical questions about the gaming ecosystem.
 
 # Objective
-The primary goal of this project is to create compelling visualizations that explore gaming trends over time, platform popularity, and genre dynamics. Additionally, the project will incorporate a novel visualization package or technique not covered in class to further enhance the storytelling experience.
+This project seeks to:
+1. Explore temporal trends in game releases.
+2. Understand the dynamics between platform popularity and user ratings.
+3. Analyze the growth or decline of various game genres over time.
+4. Investigate the geographical distribution of game development.
+5. Assess how economic factors influence gaming trends.
+
+By employing a data visualization package not covered in class, we aim to provide deeper insights and enhance our technical capabilities.
 
 # Dataset Overview
-The dataset contains 1000 synthetic records, each representing different aspects of the gaming industry. Key features include:
-- **Platform**: Gaming platform (e.g., PC, Console, Mobile)
-- **Genre**: Game genre (e.g., Action, Strategy, RPG)
-- **User Rating**: Ratings given by users
-- **Release Year**: Year of game release
+The dataset, sourced from Kaggle, includes:
+- **1000 Records**: Real data representing gaming trends.
+- **Key Features**:
+  - **Platform**: Gaming platform (e.g., PC, Console, Mobile)
+  - **Genre**: Game genre (e.g., Action, Strategy, RPG)
+  - **User Rating**: Ratings provided by users
+  - **Release Year**: Year the game was released
+  - **Region**: Geographic region where the game was developed
+  - **Development Budget**: Estimated budget for game development
 
-This dataset was chosen for its comprehensive coverage of various gaming trends, providing ample opportunities for insightful analysis.This dataset has been taken from kaggle 
+This dataset offers a comprehensive view of the gaming industry, making it ideal for our analysis.
 
 # Research Questions
-1. **Temporal Trends**: How have gaming trends evolved over the years?
+1. **Temporal Trends**: How have the number of games released evolved over the years?
+   - This question aims to identify patterns in game releases, highlighting peaks and trends over different time periods.
+
 2. **Platform Dynamics**: What is the relationship between platform popularity and user ratings?
+   - We will analyze how various platforms perform in terms of user satisfaction and what factors contribute to their popularity.
+
 3. **Genre Popularity**: Which genres are experiencing growth or decline in popularity?
+   - Understanding genre trends can help predict future gaming industry directions and consumer preferences.
+
+4. **Geographical Trends**: Which regions are leading in game development, and how has this changed over time?
+   - This will provide insights into global contributions to the gaming industry and highlight emerging hubs of game development.
+
+5. **Economic Analysis**: How do development budgets influence the success of games in terms of user ratings and sales?
+   - We aim to uncover any correlations between investment levels and the perceived quality or popularity of games.
+
+6. **Audience Targeting**: Are there significant differences in user ratings based on target demographics (age group, region)?
+   - This will explore how different user groups perceive games and identify potential gaps in satisfaction.
 
 # Project Timeline
 
 | Task Name                | Status   | Assignee       | Due Date   | Priority | Summary |
 |--------------------------|----------|----------------|------------|----------|---------|
-| Data Cleaning            | Pending  | Hemnath A      | Nov 10     | High     | Prepare and clean the dataset |
-| Exploratory Analysis     | Pending  | Hemanth Kumar  | Nov 14    | Moderate | Perform initial exploration and summary statistics |
-| Advanced Visualizations  | Pending  | Kaushik Kumar  | Nov 24    | High     | Implement advanced visualization techniques |
-| Final Report and Review  | Pending  | Rohith Singaravelu | Dec 3 | High | Compile findings, write the report, and review |
+| Data Cleaning            | Pending  | Hemnath A      | Nov 04     | High     | Prepare and clean the dataset |
+| Exploratory Analysis     | Pending  | Hemanth Kumar  | Nov 06     | Moderate | Perform initial exploration and summary statistics |
+| Advanced Visualizations  | Pending  | Kaushik Kumar  | Nov 10     | High     | Implement advanced visualization techniques |
+| Research Question Analysis | Pending | Rohith S      | Nov 15     | High     | Address and visualize insights for research questions |
+| Final Report and Review  | Pending  | Rohith S       | Dec 10     |  High    | Compile findings, write the report, and review |
 
 # Repository Structure
 The project will adhere to a clear and organized structure:
@@ -47,4 +73,5 @@ The project will adhere to a clear and organized structure:
 - `docs/`: Contains the proposal, final report, and presentation materials.
 
 # Conclusion
-This project provides a unique opportunity to apply advanced data visualization techniques to a vibrant and rapidly evolving industry. Through this initiative, we aim to deliver valuable insights while enhancing our technical skills and showcasing our ability to learn independently.
+This project offers a unique opportunity to apply advanced data visualization techniques to an ever-growing industry. By answering key research questions and using innovative methods, we aim to provide valuable insights into gaming trends while showcasing our technical and analytical skills.
+
