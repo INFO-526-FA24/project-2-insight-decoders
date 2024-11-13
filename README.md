@@ -10,7 +10,7 @@ incorporate a new element learned independently.
 - Kaushik Kumar
 - Rohith Singaravelu
 - Hemnath A
-- Hemanth Kumar
+- Hemant Kumar B K
 
 ## Project Structure
 - `data/`: Contains the dataset used for analysis.
