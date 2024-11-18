@@ -40,26 +40,38 @@ This dataset offers a comprehensive view of the gaming industry, making it ideal
 1. **Temporal Trends**: How have the number of games released evolved over the years?
    - This question aims to identify patterns in game releases, highlighting peaks and trends over different time periods.
    - Visualization: Line graphs with moving averages to highlight trends and anomalies in game releases.
+   - Dependent Variables : Date 
+   - Methodology: Analyze historical release data to identify trends and peaks using time series analysis with moving averages.
 
 2. **Platform Dynamics**: What is the relationship between platform popularity and user ratings?
    - We will analyze how various platforms perform in terms of user satisfaction and what factors contribute to their popularity.
    - Visualization: Interactive bar charts to compare user ratings and popularity across platforms.
+   - Dependent Variables : Daily Active Users
+   - Methodology: Perform correlation analysis between platform popularity metrics and user ratings to identify influential factors.
 
 3. **Genre Popularity**: Which genres are experiencing growth or decline in popularity?
    - Understanding genre trends can help predict future gaming industry directions and consumer preferences.
    - Visualization: Stacked bar charts and heatmaps to track growth or decline in various game genres over time.
+   - Dependent Variables : Top Genre, Date
+   - Methodology: Track genre trends over time using time series analysis and genre classification from historical data.
 
 4. **Geographical Trends**: Which regions are leading in game development, and how has this changed over time?
    - This will provide insights into global contributions to the gaming industry and highlight emerging hubs of game development.
    - Visualization: Choropleth maps to visualize game development trends across regions.
+   - Dependent Variables : Region, Revenue, Top genre
+   - Methodology : Use geographic information systems (GIS) and time series analysis to assess regional contributions and trends in game development.
 
 5. **Economic Analysis**: How do development budgets influence the success of games in terms of user ratings and sales?
    - We aim to uncover any correlations between investment levels and the perceived quality or popularity of games.
    - Visualization: Scatter plots with regression lines and bubble charts to analyze the relationship between development budgets, user ratings, and sales.
+   - Dependent Variables : In-game Purchases, Revenue, User Ratings
+   - Methodology : Conduct regression analysis to examine the relationship between development budgets, user ratings, and sales metrics.
 
 6. **Audience Targeting**: Are there significant differences in user ratings based on target demographics (age group, region)?
    - This will explore how different user groups perceive games and identify potential gaps in satisfaction.
    - Visualization: Boxplots and cluster analysis to understand game perception across different user groups.
+   - Dependent Variables : User Ratings
+   - Methodology : Apply demographic segmentation and statistical tests (e.g., ANOVA) to evaluate user rating variations across age groups and regions.
 
 # Project Timeline
 
@@ -77,6 +89,10 @@ The project will adhere to a clear and organized structure:
 - `scripts/`: Includes R scripts for analysis and visualization.
 - `outputs/`: Stores generated plots and visualizations.
 - `docs/`: Contains the proposal, final report, and presentation materials.
+
+#Libraries to be used
+Below are the Libraries for the analysis and visualization.
+geom_line(), geom_area() for Time series and line charts visualization, geom_bar(), geom_point() for Scattered plots visualization, geom_area(), geom_point() for using Bubble charts and finally ggplot2.
 
 # Conclusion
 This project offers a unique opportunity to apply advanced data visualization techniques to an ever-growing industry. By answering key research questions and using innovative methods, we aim to provide valuable insights into gaming trends while showcasing our technical and analytical skills.
