@@ -3,7 +3,7 @@
 # Gaming Trends Visualization Project
 
 ## Overview
-This project focuses on analyzing and visualizing trends in the gaming industry using a dataset containing 5000 rows of data which has been extracted from kaggle . The project aims to showcase advanced data visualization techniques and 
+This project focuses on analyzing and visualizing trends in the gaming industry using a dataset containing 4989 rows of data which has been extracted from kaggle . The project aims to showcase advanced data visualization techniques and 
 incorporate a new element learned independently.
 
 ## Team Members
