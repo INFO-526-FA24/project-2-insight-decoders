@@ -21,11 +21,11 @@ This project seeks to:
 4. Investigate the geographical distribution of game development.
 5. Assess how economic factors influence gaming trends.
 
-By employing a data visualization package not covered in class, we aim to provide deeper insights and enhance our technical capabilities.
+By employing a data visualization package not covered in class, such as gganimate, we aim to create dynamic and engaging visualizations. These will highlight temporal trends and other evolving patterns in the gaming industry, making insights more impactful and easier to interpret.
 
 # Dataset Overview
 The dataset, sourced from Kaggle, includes:
-- **1000 Records**: Real data representing gaming trends.
+- **4989 Records**: Real data representing gaming trends.
 - **Key Features**:
   - **Platform**: Gaming platform (e.g., PC, Console, Mobile)
   - **Genre**: Game genre (e.g., Action, Strategy, RPG)
@@ -39,21 +39,27 @@ This dataset offers a comprehensive view of the gaming industry, making it ideal
 # Research Questions
 1. **Temporal Trends**: How have the number of games released evolved over the years?
    - This question aims to identify patterns in game releases, highlighting peaks and trends over different time periods.
+   - Visualization: Line graphs with moving averages to highlight trends and anomalies in game releases.
 
 2. **Platform Dynamics**: What is the relationship between platform popularity and user ratings?
    - We will analyze how various platforms perform in terms of user satisfaction and what factors contribute to their popularity.
+   - Visualization: Interactive bar charts to compare user ratings and popularity across platforms.
 
 3. **Genre Popularity**: Which genres are experiencing growth or decline in popularity?
    - Understanding genre trends can help predict future gaming industry directions and consumer preferences.
+   - Visualization: Stacked bar charts and heatmaps to track growth or decline in various game genres over time.
 
 4. **Geographical Trends**: Which regions are leading in game development, and how has this changed over time?
    - This will provide insights into global contributions to the gaming industry and highlight emerging hubs of game development.
+   - Visualization: Choropleth maps to visualize game development trends across regions.
 
 5. **Economic Analysis**: How do development budgets influence the success of games in terms of user ratings and sales?
    - We aim to uncover any correlations between investment levels and the perceived quality or popularity of games.
+   - Visualization: Scatter plots with regression lines and bubble charts to analyze the relationship between development budgets, user ratings, and sales.
 
 6. **Audience Targeting**: Are there significant differences in user ratings based on target demographics (age group, region)?
    - This will explore how different user groups perceive games and identify potential gaps in satisfaction.
+   - Visualization: Boxplots and cluster analysis to understand game perception across different user groups.
 
 # Project Timeline
 
