@@ -1,7 +1,7 @@
 
 ---
 title: "Gaming Trends Visualization Project Proposal"
-author: "Team Members: Kaushik Kumar, Rohith Singaravelu, Hemnath A, Hemanth Kumar"
+author: "Team Members: Kaushik Kumar, Rohith Singaravelu, Hemnath A, Hemant Kumar B K"
 date: "`r format(Sys.Date(), '%B %d, %Y')`"
 output:
   html_document:
@@ -66,7 +66,7 @@ This dataset offers a comprehensive view of the gaming industry, making it ideal
 | Task Name                | Status   | Assignee       | Due Date   | Priority | Summary |
 |--------------------------|----------|----------------|------------|----------|---------|
 | Data Cleaning            | Pending  | Hemnath A      | Nov 04     | High     | Prepare and clean the dataset |
-| Exploratory Analysis     | Pending  | Hemanth Kumar  | Nov 06     | Moderate | Perform initial exploration and summary statistics |
+| Exploratory Analysis     | Pending  | Hemant Kumar BK| Nov 06     | Moderate | Perform initial exploration and summary statistics |
 | Advanced Visualizations  | Pending  | Kaushik Kumar  | Nov 10     | High     | Implement advanced visualization techniques |
 | Research Question Analysis | Pending | Rohith S      | Nov 15     | High     | Address and visualize insights for research questions |
 | Final Report and Review  | Pending  | Rohith S       | Dec 10     |  High    | Compile findings, write the report, and review |
