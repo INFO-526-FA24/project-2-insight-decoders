@@ -1,0 +1,329 @@
+```{r}
+install.packages("caret")
+```
+
+
+```{r}
+install.packages("xgboost")
+install.packages("forcast")
+```
+
+
+```{r}
+library(data.table)
+library(lubridate)
+library(ggplot2)
+library(xgboost)
+library(caret)
+library(tidyr)
+library(forecast)
+
+# Load dataset
+file_path <- '/Users/rohithfreaks/Downloads/Enhanced_Gaming_Trends_Dataset.csv'  # Update path
+data <- fread(file_path)
+
+# Preprocess data for weekly aggregation
+data[, Date := as.Date(Date)]
+data[, Week := as.character(floor_date(Date, "week"))]
+
+# Convert all columns except `Week` to numeric for summation
+numeric_cols <- setdiff(names(data), c("Date", "Week"))
+data[, (numeric_cols) := lapply(.SD, as.numeric), .SDcols = numeric_cols]
+
+# Perform weekly aggregation
+weekly_data <- data[, lapply(.SD, sum, na.rm = TRUE), by = Week, .SDcols = numeric_cols]
+weekly_data[, Week_Start := as.Date(Week)]
+
+# Remove outliers using the IQR method
+remove_outliers <- function(df, column) {
+  Q1 <- quantile(df[[column]], 0.25, na.rm = TRUE)
+  Q3 <- quantile(df[[column]], 0.75, na.rm = TRUE)
+  IQR <- Q3 - Q1
+  lower_bound <- Q1 - 1.5 * IQR
+  upper_bound <- Q3 + 1.5 * IQR
+  df[df[[column]] >= lower_bound & df[[column]] <= upper_bound]
+}
+
+weekly_data <- remove_outliers(weekly_data, "Revenue ($)")
+weekly_data <- remove_outliers(weekly_data, "Daily Active Users (DAU)")
+
+# Add variations and lagged features
+set.seed(42)
+weekly_data[, `Revenue ($)` := `Revenue ($)` + seq(0, 300000, length.out = .N)]
+weekly_data[, `Revenue ($)` := `Revenue ($)` + 100000 * sin(seq(0, 6 * pi, length.out = .N))]
+weekly_data[, `Daily Active Users (DAU)` := `Daily Active Users (DAU)` + 300000 * sin(seq(0, 6 * pi, length.out = .N))]
+weekly_data[, `New Registrations` := `Daily Active Users (DAU)` * runif(.N, 0.05, 0.1)]
+weekly_data[, Revenue_Lag1 := shift(`Revenue ($)`, 1, fill = mean(`Revenue ($)`))]
+weekly_data[, DAU_Lag1 := shift(`Daily Active Users (DAU)`, 1, fill = mean(`Daily Active Users (DAU)`))]
+weekly_data[, Week_Num := .I]
+
+# Add seasonal and trend features
+weekly_data[, Yearly_Sine := sin(2 * pi * Week_Num / 52)]
+weekly_data[, Yearly_Cosine := cos(2 * pi * Week_Num / 52)]
+weekly_data[, Revenue_MA4 := zoo::rollmean(`Revenue ($)`, 4, fill = mean(`Revenue ($)`))]
+weekly_data[, DAU_MA4 := zoo::rollmean(`Daily Active Users (DAU)`, 4, fill = mean(`Daily Active Users (DAU)`))]
+
+# Recursive forecasting function
+forecast_target <- function(target, model_name) {
+  features <- c("Revenue_Lag1", "DAU_Lag1", "Week_Num", "Yearly_Sine", "Yearly_Cosine", "Revenue_MA4", "DAU_MA4")
+
+  X <- as.matrix(weekly_data[, ..features])
+  y <- weekly_data[[target]]
+
+  # Train-test split
+  train_idx <- 1:floor(0.8 * nrow(X))
+  X_train <- X[train_idx, ]
+  X_test <- X[-train_idx, ]
+  y_train <- y[train_idx]
+  y_test <- y[-train_idx]
+
+  # Train XGBoost model
+  dtrain <- xgb.DMatrix(data = X_train, label = y_train)
+  dtest <- xgb.DMatrix(data = X_test, label = y_test)
+  params <- list(objective = "reg:squarederror", eta = 0.05, max_depth = 5)
+  model <- xgb.train(params, dtrain, nrounds = 300)
+
+  # Evaluate model
+  y_pred <- predict(model, dtest)
+  rmse <- sqrt(mean((y_test - y_pred)^2))
+  r2 <- 1 - sum((y_test - y_pred)^2) / sum((y_test - mean(y_test))^2)
+  cat(sprintf("%s - RMSE: %.2f, R^2: %.2f\n", model_name, rmse, r2))
+
+  # Recursive forecasting
+  future_steps <- (2028 - year(weekly_data$Week_Start[nrow(weekly_data)])) * 52
+  future_features <- tail(as.data.table(X), 1)
+  future_forecast <- numeric(future_steps)
+
+  for (i in 1:future_steps) {
+    future_pred <- predict(model, as.matrix(future_features))
+    future_forecast[i] <- future_pred
+
+    # Update features dynamically
+    future_features$Revenue_Lag1 <- future_pred + rnorm(1, 0, 50000)
+    future_features$DAU_Lag1 <- future_features$DAU_Lag1 + rnorm(1, 0, 50000)
+    future_features$Week_Num <- future_features$Week_Num + 1
+    future_features$Yearly_Sine <- sin(2 * pi * future_features$Week_Num / 52)
+    future_features$Yearly_Cosine <- cos(2 * pi * future_features$Week_Num / 52)
+    future_features$Revenue_MA4 <- mean(tail(future_forecast, min(4, i)))
+    future_features$DAU_MA4 <- future_features$DAU_MA4 + rnorm(1, 0, 30000)
+  }
+
+  # Plot results
+  ggplot() +
+    geom_line(aes(x = weekly_data$Week_Start, y = weekly_data[[target]]), color = "blue", size = 1) +
+    geom_line(aes(x = seq(max(weekly_data$Week_Start), by = "week", length.out = future_steps), 
+                  y = future_forecast), color = "green", size = 1) +
+    geom_vline(xintercept = max(weekly_data$Week_Start), linetype = "dashed", color = "orange") +
+    labs(title = paste(model_name, "Predictions and Forecast (XGBoost)"),
+         x = "Date", y = model_name) +
+    theme_minimal()
+}
+
+# Forecast for each target
+forecast_target("Revenue ($)", "Revenue")
+forecast_target("Daily Active Users (DAU)", "DAU")
+forecast_target("New Registrations", "New Registrations")
+
+
+
+
+# Load libraries
+library(data.table)
+library(ggplot2)
+library(lubridate)
+library(xgboost)
+library(caret)
+
+# Read data
+file_path <- '/Users/rohithfreaks/Downloads/Enhanced_Gaming_Trends_Dataset.csv'  # Update path
+data <- fread(file_path)
+data[, Date := as.Date(Date)]
+data[, Week := floor_date(Date, unit = "week")]
+platforms <- unique(data$Platform)
+
+# Outlier removal function
+remove_outliers <- function(df, column) {
+  Q1 <- quantile(df[[column]], 0.25, na.rm = TRUE)
+  Q3 <- quantile(df[[column]], 0.75, na.rm = TRUE)
+  IQR <- Q3 - Q1
+  lower_bound <- Q1 - 1.5 * IQR
+  upper_bound <- Q3 + 1.5 * IQR
+  df[df[[column]] >= lower_bound & df[[column]] <= upper_bound, ]
+}
+
+# Initialize lists to store results for combined plots
+forecast_results <- list(Revenue = list(), DAU = list(), `New Registrations` = list())
+feature_importance_results <- list(Revenue = list(), DAU = list(), `New Registrations` = list())
+
+# Forecast for each platform
+features <- c("Revenue_Lag1", "DAU_Lag1", "Week_Num", "Yearly_Sine", "Yearly_Cosine", "Revenue_MA4", "DAU_MA4")
+
+for (platform in platforms) {
+  cat("\n\n=== Forecasting for Platform:", platform, "===\n")
+  
+  # Filter data for the specific platform
+  platform_data <- data[Platform == platform]
+  platform_data[, Week := floor_date(Date, "week")]
+  platform_weekly_data <- platform_data[, lapply(.SD, sum, na.rm = TRUE), by = Week, .SDcols = c("Revenue ($)", "Daily Active Users (DAU)")]
+  platform_weekly_data[, Week_Start := as.Date(Week, origin = "1970-01-01")]
+  
+  # Remove outliers
+  platform_weekly_data <- remove_outliers(platform_weekly_data, "Revenue ($)")
+  platform_weekly_data <- remove_outliers(platform_weekly_data, "Daily Active Users (DAU)")
+
+  # Add variations and lagged features
+  n <- nrow(platform_weekly_data)
+  platform_weekly_data[, `Revenue ($)` := `Revenue ($)` + seq(0, 300000, length.out = n) + 100000 * sin(seq(0, 6 * pi, length.out = n))]
+  platform_weekly_data[, `Daily Active Users (DAU)` := `Daily Active Users (DAU)` + 300000 * sin(seq(0, 6 * pi, length.out = n))]
+  platform_weekly_data[, `New Registrations` := `Daily Active Users (DAU)` * runif(n, 0.05, 0.1)]
+  platform_weekly_data[, Revenue_Lag1 := shift(`Revenue ($)`, 1, fill = mean(`Revenue ($)`))]
+  platform_weekly_data[, DAU_Lag1 := shift(`Daily Active Users (DAU)`, 1, fill = mean(`Daily Active Users (DAU)`))]
+  platform_weekly_data[, Week_Num := seq_len(.N)]
+  platform_weekly_data[, `Yearly_Sine` := sin(2 * pi * Week_Num / 52)]
+  platform_weekly_data[, `Yearly_Cosine` := cos(2 * pi * Week_Num / 52)]
+  platform_weekly_data[, Revenue_MA4 := frollmean(`Revenue ($)`, 4, align = "right", na.rm = TRUE)]
+  platform_weekly_data[, DAU_MA4 := frollmean(`Daily Active Users (DAU)`, 4, align = "right", na.rm = TRUE)]
+
+  # Forecast and store results
+  for (target in c("Revenue ($)", "Daily Active Users (DAU)", "New Registrations")) {
+    label <- gsub(" \\(\\$\\)", "", target)
+    X <- as.matrix(platform_weekly_data[, ..features])
+    y <- platform_weekly_data[[target]]
+
+    # Train-test split
+    split <- floor(0.8 * nrow(X))
+    X_train <- X[1:split, ]
+    X_test <- X[(split + 1):nrow(X), ]
+    y_train <- y[1:split]
+    y_test <- y[(split + 1):length(y)]
+
+    # Train model
+    dtrain <- xgb.DMatrix(data = X_train, label = y_train)
+    dtest <- xgb.DMatrix(data = X_test, label = y_test)
+    model <- xgboost(data = dtrain, nrounds = 300, eta = 0.05, max_depth = 5, objective = "reg:squarederror", verbose = 0)
+
+    # Evaluate model
+    y_pred <- predict(model, newdata = dtest)
+    rmse <- sqrt(mean((y_test - y_pred)^2))
+    r2 <- 1 - sum((y_test - y_pred)^2) / sum((y_test - mean(y_test))^2)
+    cat(label, "(", platform, ") - RMSE:", rmse, ", R²:", r2, "\n")
+
+    # Recursive forecasting up to 2028
+    future_steps <- (2028 - year(platform_weekly_data$Week_Start[n])) * 52
+    future_dates <- seq.Date(from = platform_weekly_data$Week_Start[n], by = "week", length.out = future_steps)
+    future_features <- X[nrow(X), , drop = FALSE]
+    future_forecast <- numeric()
+
+    for (i in seq_len(future_steps)) {
+      prediction <- predict(model, newdata = future_features)
+      future_forecast <- c(future_forecast, prediction)
+
+      # Update features dynamically
+      future_features[, "Revenue_Lag1"] <- future_features[, "Revenue_Lag1"] + rnorm(1, 0, 50000)
+      future_features[, "DAU_Lag1"] <- future_features[, "DAU_Lag1"] + rnorm(1, 0, 50000)
+      future_features[, "Week_Num"] <- future_features[, "Week_Num"] + 1
+      future_features[, "Yearly_Sine"] <- sin(2 * pi * future_features[, "Week_Num"] / 52)
+      future_features[, "Yearly_Cosine"] <- cos(2 * pi * future_features[, "Week_Num"] / 52)
+      future_features[, "Revenue_MA4"] <- mean(tail(future_forecast, 4), na.rm = TRUE)
+      future_features[, "DAU_MA4"] <- future_features[, "DAU_MA4"] + rnorm(1, 0, 30000)
+    }
+
+    # Store results
+    forecast_results[[label]][[platform]] <- list(historical_dates = platform_weekly_data$Week_Start,
+                                                  historical_values = platform_weekly_data[[target]],
+                                                  forecast_dates = future_dates,
+                                                  forecast_values = future_forecast)
+
+    # Store feature importance
+    importance <- xgb.importance(model = model)
+    feature_importance_results[[label]][[platform]] <- importance
+  }
+}
+
+# Plot combined forecasts
+plot_forecasts <- function(results, metric) {
+  plot_list <- list()
+  
+  for (platform in names(results)) {
+    forecast <- results[[platform]]
+    
+    historical_data <- data.table(Date = forecast$historical_dates, 
+                                  Value = forecast$historical_values, 
+                                  Type = "Historical")
+    forecast_data <- data.table(Date = forecast$forecast_dates, 
+                                Value = forecast$forecast_values, 
+                                Type = "Forecast")
+    
+    combined_data <- rbind(historical_data, forecast_data)
+    combined_data[, Platform := platform]
+    
+    # Create ggplot for the platform
+    p <- ggplot(combined_data, aes(x = Date, y = Value, color = Type)) +
+      geom_line(size = 1) +
+      geom_vline(xintercept = as.numeric(max(historical_data$Date)), 
+                 linetype = "dashed", color = "orange") +
+      scale_y_continuous(labels = scales::comma) + # Disable scientific notation
+      labs(title = paste0(metric, " Forecast for ", platform), 
+           x = "Date", 
+           y = metric) +
+      theme_minimal() +
+      theme(legend.position = "bottom")
+    
+    plot_list[[platform]] <- p
+  }
+  
+  return(plot_list)
+}
+
+
+# Plot Revenue forecasts
+revenue_forecasts <- plot_forecasts(forecast_results$Revenue, "Revenue")
+for (platform in names(revenue_forecasts)) {
+  print(revenue_forecasts[[platform]])
+}
+
+# Plot DAU forecasts
+dau_forecasts <- plot_forecasts(forecast_results$DAU, "Daily Active Users (DAU)")
+for (platform in names(dau_forecasts)) {
+  print(dau_forecasts[[platform]])
+}
+
+# Plot New Registrations forecasts
+registration_forecasts <- plot_forecasts(forecast_results$`New Registrations`, "New Registrations")
+for (platform in names(registration_forecasts)) {
+  print(registration_forecasts[[platform]])
+}
+
+# Plot feature importance
+plot_feature_importance <- function(results, metric) {
+  plot_list <- list()
+  
+  for (platform in names(results)) {
+    importance <- results[[platform]]
+    importance_data <- data.table(Feature = importance$Feature, 
+                                   Importance = importance$Gain)
+    
+    # Create ggplot for the platform
+    p <- ggplot(importance_data, aes(x = reorder(Feature, Importance), y = Importance)) +
+      geom_bar(stat = "identity", fill = "blue", alpha = 0.7) +
+      coord_flip() +
+      scale_y_continuous(labels = scales::comma) + # Disable scientific notation
+      labs(title = paste0("Feature Importance for ", metric, " (", platform, ")"), 
+           x = "Features", 
+           y = "Importance Score") +
+      theme_minimal()
+    
+    plot_list[[platform]] <- p
+  }
+  
+  return(plot_list)
+}
+# Generate the feature importance plots for a specific metric
+feature_importance_plots <- plot_feature_importance(feature_importance_results$Revenue, "Revenue")
+
+# Display each plot
+for (platform in names(feature_importance_plots)) {
+  print(feature_importance_plots[[platform]])
+}
+
+```
