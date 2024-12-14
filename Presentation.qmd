@@ -43,6 +43,7 @@ Some challenges we faced include:
 ## 5. What visualization tools and techniques did you use?
 We primarily used:
 - **ggplot2** for static visualizations.
+-used prophet and XGboost to get future revenue predictions
 - Advanced packages for interactive and dynamic visualizations, such as **plotly**.
 - Custom themes for enhancing the aesthetic and interpretability of plots.
 
