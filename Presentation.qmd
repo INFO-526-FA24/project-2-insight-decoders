@@ -1,6 +1,6 @@
 ---
 title: "Gaming Trends Visualization Project: Q&A Session"
-author: "Team Members: Kaushik Kumar, Rohith Singaravelu, Hemnath A, Hemanth Kumar"
+author: "Team Members: Kaushik Kumar, Rohith Singaravelu, Hemnath A, Hemant Kumar B K"
 date: "`r format(Sys.Date(), '%B %d, %Y')`"
 output:
   html_document:
