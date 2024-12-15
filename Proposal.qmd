@@ -23,7 +23,7 @@ This project seeks to:
 
 By employing a data visualization package not covered in class, such as gganimate, we aim to create dynamic and engaging visualizations. These will highlight temporal trends and other evolving patterns in the gaming industry, making insights more impactful and easier to interpret.
 
-# Dataset Overview
+# Dataset Overview.
 The dataset, sourced from Kaggle, includes:
 - **4989 Records**: Real data representing gaming trends.
 - **Key Features**:
@@ -40,7 +40,7 @@ This dataset offers a comprehensive view of the gaming industry, making it ideal
 1. **Temporal Trends**: How have the number of games released evolved over the years?
    - This question aims to identify patterns in game releases, highlighting peaks and trends over different time periods.
    - Visualization: Line graphs with moving averages to highlight trends and anomalies in game releases.
-   - Dependent Variables : Date 
+   - Dependent Variables : Date
    - Methodology: Analyze historical release data to identify trends and peaks using time series analysis with moving averages.
 
 2. **Platform Dynamics**: What is the relationship between platform popularity and user ratings?

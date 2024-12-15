@@ -10,7 +10,7 @@ output:
     number_sections: true
 ---
 
-# Welcome to the Gaming Trends Visualization Project
+# Welcome to the Gaming Trends Visualization Project.
 
 ## Overview
 This project explores the dynamic world of gaming through advanced data visualization techniques. Our aim is to analyze key industry trends and provide valuable insights into platform popularity, genre dynamics, and user ratings.

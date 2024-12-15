@@ -12,7 +12,7 @@ output:
 # Introduction
 Welcome to the Q&A session for our Gaming Trends Visualization Project. This document addresses key questions related to our analysis, dataset, and insights.
 
-# Research Questions Recap
+# Research Questions Recap.
 
 1. **Temporal Trends**: How have the number of games released evolved over the years?
 2. **Platform Dynamics**: What is the relationship between platform popularity and user ratings?
